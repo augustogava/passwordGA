@@ -1,36 +1,117 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+PasswordGa
+===================
 
-## Getting Started
+This is a password hash generator.  You can generate strong unique passwords for multiple
+website logins, using only a single master password (or more if you prefer).  You dont 
+need to keep a password safe safe.
 
-First, run the development server:
+Choose from the following ways of using PasswordGa:
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+- a Chrome extension
+- a bookmarklet (use with Firefox for example, or Internet Explorer)
+- a standalone webpage (for passwords outside of a webpage)
+- a console application (for times when you dont want to use a webbrowser; also really simple, so 
+you can see how it works)
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+The cool thing about this system is:
+- you dont need a password safe, which you would need to store somewhere, backup and so on
+- each site's password is unique
+- I can't personally see any obvious way to guess the master password, even if someone knows
+  a site's password, and the name of that site (but I cannot guarantee that, and you use 
+  this script at your own risk).
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+To use, Chrome extension
+------------------------
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+To install:
 
-## Learn More
+- Go to chrome://extensions
+- click 'developer mode'
+- press 'load unpacked extension...'
+- select the 'chrome' subfolder, and click 'ok'
 
-To learn more about Next.js, take a look at the following resources:
+To use:
+- go to a website where you want to login
+- click on the blue 'key'
+- type in your master password and press 'submit', or press the 'enter' key
+-> the password will be filled in for you automatically
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+What if I want to be sure I didn't mistype the master password?
+- click 'confirm', and fill in a 'confirm' password
+- if the passwords are different, you will see a message, and you can try again
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+I want to change my master password.  How can I put in the old and news passwords?
+- click on the 'old password' field
+- click the blue key
+- click on 'selected field only', fill in your master password, and click 'submit'
+- only the old password field will be filled in
+- repeat for each of the 'new password' fields
 
-## Deploy on Vercel
+To use, bookmarklet
+-------------------
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+In Firefox or Internet Explorer, using a bookmarklet is the easiest way to enter passwords.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- In your internet browser, create a bookmark in your bookmarks toolbar, and paste the contents of 
+inputpassword.js inside
+- Go to a page where you want to enter a password
+   - click the bookmark
+   - enter your master password, and press 'enter'
+   - that's it!
+
+The password will be unique for each domain, and reasonably secure.  Ways to hack this system 
+might include:
+- shoulder-surfing your typing
+- key-loggers
+- javascript hacks in the target website
+
+I'm fairly sure that it's non-trivial to work backwards from a password to retrieve the 
+original master password, but I'm not an expert in this domain, and cannot guarantee that, and 
+you use this script at your own risk.
+
+Note that there are a couple of additional bookmarklets available here:
+- showpass.js reveals all the password fields on the page, so you can check that the generated
+  passwords look reasonable
+- createpassword.js has two password fields, so you have to enter the password twice.  If they 
+  are different, then it will show an error, and refuse to proceed.
+
+To use, standalone page
+-----------------------
+
+Using the standalone page works where the password field is not embedded in a webpage.
+
+- fill in the domain and password
+- click 'Get Password'
+
+- if you click 'Add confirm', then you can type your password twice, to check you typed it 
+correctly
+
+Console version
+---------------
+
+masterpass.py is a console version, using python.  You can use this if you dont have access
+to a web browser.  It copies the password into the clipboard, without ever showing it in clear.
+
+The code is also easy to read and understand, so you can see how it works.
+
+    > python masterpass.py
+    Please enter domain: mydomain.com
+    Please enter master password for mydomain.com: 
+    Password has been copied to your clipboard
+
+
+How does it work?
+-----------------
+
+Have a look at the python version.  It's very simple:
+- it takes the sha1 hash of masterpassword + ':' + domain
+- then it throws away everything after the 16th character
+- that's it!
+
+Is this compatible with passwordbookmarklet?
+--------------------------------------------
+
+No: it doesn't have the '1a' at the end of the generated passwords.  So you will need to change
+your password on each website to switch from one system to the other.
+
+
